@@ -15,12 +15,29 @@ const URI = process.env.MONGODB_URI;
 app.use(express.json());
 
 mongoose.connect(URI);
-const Food_category = mongoose.model("food-category", { categoryName: String });
-const Food = new Food_category({ categoryName: "drinks" });
+const FOOD_CATEGORY_SCHEMA = new mongoose.Schema({ categoryName: String });
+const FoodCategoryModel = mongoose.model(
+  "FoodCategory",
+  FOOD_CATEGORY_SCHEMA,
+  "food-category"
+);
 
 app.get("/", async (req: Request, res: Response) => {
-  res.send("Hello from backend");
+  const foodCategories = await FoodCategoryModel.find();
+  res.json(foodCategories);
 });
+
+app.get("/create", async (req: Request, res: Response) => {
+  const newItem = await FoodCategoryModel.create({ categoryName: "Drinks" });
+  res.send({ messege: "New food category created successfully", newItem });
+});
+
+// app.get("/delete", async (req: Request, res: Response) => {
+//   const deletedItem = await FoodCategoryModel.deleteOne({
+//     categoryName: "Fruits",
+//   });
+//   res.send({ messege: "Food category deleted successfully", deletedItem });
+// });
 
 app.listen(PORT, () => {
   console.log(`Server is runnig on http://localhost:${PORT}`);
