@@ -16,7 +16,7 @@ foodCategoryRouter.get("/:id", async (req: Request, res: Response) => {
 
 foodCategoryRouter.post("/", async (req: Request, res: Response) => {
   const newItem = await FoodCategoryModel.create({
-    categoryName: "Beverages",
+    categoryName: req.body.categoryName,
   });
   res.send({ messege: "New food category created successfully", newItem });
 });
