@@ -18,7 +18,7 @@ foodCategoryRouter.post("/", async (req: Request, res: Response) => {
   const newItem = await FoodCategoryModel.create({
     categoryName: req.body.categoryName,
   });
-  res.send({ messege: "New food category created successfully", newItem });
+  res.json(newItem);
 });
 
 foodCategoryRouter.delete("/:id", async (req: Request, res: Response) => {

@@ -2,10 +2,15 @@ import { configDotenv } from "dotenv";
 import express, { Request, Response } from "express";
 import { FoodCategoryModel } from "./models/food-category";
 import { foodCategoryRouter } from "./router/food-category";
+import { FoodModel } from "./models/food";
+import { foodRouter } from "./router/food";
 const mongoose = require("mongoose");
 const cors = require("cors");
 const PORT = 8000;
 const app = express();
+
+const appetizer =
+  "https://asset.cloudinary.com/dpyjpkzqg/f9910b43db0395803b0358cd37ec1363";
 
 //1.Connecting MongoDB
 
@@ -28,37 +33,11 @@ const connectURI = async () => {
 };
 connectURI();
 
+//FOOD CATEGORY DB
 app.use("/food-category/", foodCategoryRouter);
 
 //FOOD DB
-const FOOD_SCHEMA = new mongoose.Schema(
-  {
-    foodName: String,
-    price: Number,
-    image: String,
-    ingredients: String,
-    category: mongoose.Types.ObjectId,
-  },
-  { timestamp: true }
-);
-const FoodModel = mongoose.model("Food", FOOD_SCHEMA, "food");
-
-app.get("/food/", async (req: Request, res: Response) => {
-  const food = await FoodModel.find();
-  res.json(food);
-});
-
-app.post("/food/", async (req: Request, res: Response) => {
-  const newFood = await FoodModel.create({
-    foodName: "Brie Crostini Appetizer",
-    price: 12,
-    image: "none",
-    category: "O67861026d1aeed425237f5ca",
-    ingredients:
-      "Fluffy pancakes stacked with fruits, cream, syrup, and powdered sugar.",
-  });
-  res.send({ messege: "New food category created successfully", newFood });
-});
+app.use("/food/", foodRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is runnig on http://localhost:${PORT}`);
