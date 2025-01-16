@@ -15,24 +15,31 @@ foodRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 foodRouter.post("/", async (req: Request, res: Response) => {
-  const body = req.body;
-  const newFood = await FoodModel.create(body);
-  res.send({ messege: "New food category created successfully", newFood });
+  const body = { ...req.body };
+
+  try {
+    const newFood = await FoodModel.create(body);
+    res.json(newFood);
+  } catch (e) {
+    console.error(e, "aldaa");
+  }
 });
 
-// foodRouter.delete("/:id", async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const deletedItem = await FoodModel.deleteOne({ _id: id });
-//   res.send({ messege: "Food category deleted successfully", deletedItem });
-// });
+foodRouter.delete("/:_id", async (req: Request, res: Response) => {
+  const id = req.params._id;
+  try {
+    const deletedItem = await FoodModel.findByIdAndDelete({
+      _id: id,
+    });
+    res.json(deletedItem);
+  } catch (e) {
+    console.error(e, "aldaa");
+  }
+});
 
-// foodRouter.put("/:id", async (req: Request, res: Response) => {
-//   const id = req.params.id;
-//   const updatedItem = await FoodModel.findOneAndUpdate(
-//     { _id: id },
-//     {
-//       categoryName: "Soup",
-//     }
-//   );
-//   res.send({ messege: "Food category updated successfully", updatedItem });
-// });
+foodRouter.put("/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const body = { ...req.body };
+  const updatedItem = await FoodModel.findOneAndUpdate(body);
+  res.json({ updatedItem });
+});
