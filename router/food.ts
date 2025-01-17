@@ -8,7 +8,7 @@ foodRouter.get("/", async (req: Request, res: Response) => {
   res.json(food);
 });
 
-foodRouter.get("/:id", async (req: Request, res: Response) => {
+foodRouter.get("/:_id", async (req: Request, res: Response) => {
   const id = req.params.id;
   const oneFood = await FoodModel.find({ category: id });
   res.json(oneFood);
@@ -37,9 +37,9 @@ foodRouter.delete("/:_id", async (req: Request, res: Response) => {
   }
 });
 
-foodRouter.put("/:id", async (req: Request, res: Response) => {
-  const id = req.params.id;
+foodRouter.put("/:_id", async (req: Request, res: Response) => {
+  const id = req.params._id;
   const body = { ...req.body };
-  const updatedItem = await FoodModel.findOneAndUpdate(body);
-  res.json({ updatedItem });
+  const updatedItem = await FoodModel.findOneAndUpdate({ _id: id }, body);
+  res.json(updatedItem);
 });
