@@ -4,12 +4,19 @@ import { FoodModel } from "../models/food";
 export const foodRouter = Router();
 
 foodRouter.get("/", async (req: Request, res: Response) => {
+  const query = req.query;
   const food = await FoodModel.find();
   res.json(food);
 });
 
+// foodRouter.get("/?category", async (req: Request, res: Response) => {
+//   const query = req.query;
+//   const food = await FoodModel.find();
+//   res.json(food);
+// });
+
 foodRouter.get("/:_id", async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id = req.params._id;
   const oneFood = await FoodModel.find({ category: id });
   res.json(oneFood);
 });
