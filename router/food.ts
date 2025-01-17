@@ -3,11 +3,11 @@ import { FoodModel } from "../models/food";
 
 export const foodRouter = Router();
 
-foodRouter.get("/", async (req: Request, res: Response) => {
-  const query = req.query;
-  const food = await FoodModel.find();
-  res.json(food);
-});
+// foodRouter.get("/", async (req: Request, res: Response) => {
+//   const query = req.query;
+//   const food = await FoodModel.find();
+//   res.json(food);
+// });
 
 // foodRouter.get("/?category", async (req: Request, res: Response) => {
 //   const query = req.query;
@@ -15,8 +15,11 @@ foodRouter.get("/", async (req: Request, res: Response) => {
 //   res.json(food);
 // });
 
-foodRouter.get("/:_id", async (req: Request, res: Response) => {
-  const id = req.params._id;
+foodRouter.get("/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  if (!id) {
+    res.json({ messege: "error" });
+  }
   const oneFood = await FoodModel.find({ category: id });
   res.json(oneFood);
 });
