@@ -9,14 +9,33 @@ export const foodRouter = Router();
 //   res.json(food);
 // });
 
+foodRouter.get("/", async (req: Request, res: Response) => {
+  try {
+    const { category } = req.query; // Extract category from query params
+
+    let filter = {};
+    if (category) {
+      filter = { category: category }; // Filter by category if provided
+    }
+
+    const foods = await FoodModel.find(filter); // Apply filter in database query
+    res.json(foods);
+  } catch (error) {
+    console.error("Error fetching foods:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+export default foodRouter;
+
 // foodRouter.get("/?category", async (req: Request, res: Response) => {
 //   const query = req.query;
 //   const food = await FoodModel.find();
 //   res.json(food);
 // });
 
-foodRouter.get("/:id", async (req: Request, res: Response) => {
-  const id = req.params.id;
+foodRouter.get("/:_id", async (req: Request, res: Response) => {
+  const id = req.params._id;
   if (!id) {
     res.json({ messege: "error" });
   }
