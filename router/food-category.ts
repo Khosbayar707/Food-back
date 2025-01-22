@@ -1,11 +1,21 @@
 import { Request, Response, Router } from "express";
 import { FoodCategoryModel } from "../models/food-category";
+import { verifyToken } from "@clerk/backend";
 
 export const foodCategoryRouter = Router();
 
 foodCategoryRouter.get("/", async (req: Request, res: Response) => {
-  const foodCategories = await FoodCategoryModel.find();
-  res.json(foodCategories);
+  const token: any = req.get("authentication");
+  try {
+    const verified = await verifyToken(token, {
+      secretKey: process.env.CLERK_SECRET_KEY,
+    });
+
+    const foodCategories = await FoodCategoryModel.find();
+    res.json(foodCategories);
+  } catch {
+    res.json({ status: "Failed" });
+  }
 });
 
 foodCategoryRouter.get("/:id", async (req: Request, res: Response) => {
