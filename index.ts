@@ -4,6 +4,8 @@ import { FoodCategoryModel } from "./models/food-category";
 import { foodCategoryRouter } from "./router/food-category";
 import { FoodModel } from "./models/food";
 import { foodRouter } from "./router/food";
+import { foodOrderItemRouter } from "./router/food-order-item";
+import FoodOrderRouter from "./router/food-order";
 const mongoose = require("mongoose");
 const cors = require("cors");
 const PORT = 8000;
@@ -38,6 +40,12 @@ app.use("/food-category/", foodCategoryRouter);
 
 //FOOD DB
 app.use("/food/", foodRouter);
+
+//FOOD ORDER ITEM DB
+app.use("/foodOrderItem/", foodOrderItemRouter);
+
+//FOOD ORDER ITEM DB
+app.use("/food-order/", FoodOrderRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is runnig on http://localhost:${PORT}`);
