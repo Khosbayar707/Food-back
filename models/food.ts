@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const FOOD_SCHEMA = new mongoose.Schema(
   {
     foodName: String,
-    price: String,
+    price: Number,
     image: String,
     ingredients: String,
     category: mongoose.Schema.Types.ObjectId,
