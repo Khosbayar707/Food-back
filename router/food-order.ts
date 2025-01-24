@@ -1,28 +1,34 @@
 import { Request, Response, Router } from "express";
 import { FoodOrderModel } from "../models/food-order";
+import { auth, CustomRequest } from "./food-category";
 
 export const FoodOrderRouter = Router();
 export default FoodOrderRouter;
 
-FoodOrderRouter.post("/", async (req: Request, res: Response) => {
-  const body = req.body;
+FoodOrderRouter.post("/", auth, async (req: CustomRequest, res: Response) => {
+  const user = req.userId;
+  const { foodOrderItems, totalPrice } = req.body;
   try {
-    const newItem = await FoodOrderModel.create(body);
-    res.json(newItem);
+    const newOrder = await FoodOrderModel.create({
+      user,
+      foodOrderItems,
+      totalPrice,
+    });
+    res.json(newOrder);
   } catch (e) {
     console.error(e, "aldaa");
   }
 });
 
-FoodOrderRouter.post("/", async (req: Request, res: Response) => {
-  const body = req.body;
-  try {
-    const newItem = await FoodOrderModel.create(body);
-    res.json(newItem);
-  } catch (e) {
-    console.error(e, "aldaa");
-  }
-});
+// FoodOrderRouter.post("/", async (req: Request, res: Response) => {
+//   const body = req.body;
+//   try {
+//     const newItem = await FoodOrderModel.create(body);
+//     res.json(newItem);
+//   } catch (e) {
+//     console.error(e, "aldaa");
+//   }
+// });
 
 FoodOrderRouter.delete("/:_id", async (req: Request, res: Response) => {
   const id = req.params._id;

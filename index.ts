@@ -41,10 +41,7 @@ app.use("/food-category/", foodCategoryRouter);
 //FOOD DB
 app.use("/food/", foodRouter);
 
-//FOOD ORDER ITEM DB
-app.use("/foodOrderItem/", foodOrderItemRouter);
-
-//FOOD ORDER ITEM DB
+//FOOD ORDER DB
 app.use("/food-order/", FoodOrderRouter);
 
 app.listen(PORT, () => {
