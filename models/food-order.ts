@@ -1,18 +1,16 @@
 import mongoose, { Schema } from "mongoose";
 import { FoodOrderStatusEnum } from "../enums";
 
-const foodOrderItems = new Schema({
-  foodOrderItems: {
-    food: String,
-    quantity: Number,
-  },
+const foodOrderItemsSchema = new Schema({
+  food: { type: String, required: true },
+  quantity: { type: Number, required: true },
 });
 
 const FOOD_ORDER_SCHEMA = new mongoose.Schema(
   {
     user: String,
     totalPrice: Number,
-    foodOrderItems: [foodOrderItems],
+    foodOrderItems: [foodOrderItemsSchema],
     status: {
       type: String,
       enum: Object.values(FoodOrderStatusEnum),
