@@ -8,7 +8,10 @@ const foodOrderItemsSchema = new Schema({
 
 const FOOD_ORDER_SCHEMA = new mongoose.Schema(
   {
-    user: String,
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
     totalPrice: Number,
     foodOrderItems: [foodOrderItemsSchema],
     status: {

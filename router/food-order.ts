@@ -6,8 +6,7 @@ export const FoodOrderRouter = Router();
 export default FoodOrderRouter;
 
 FoodOrderRouter.post("/", auth, async (req: CustomRequest, res: Response) => {
-  const user = req.userId;
-  const { foodOrderItems, totalPrice } = req.body;
+  const { user, foodOrderItems, totalPrice } = req.body;
   try {
     const newOrder = await FoodOrderModel.create({
       user,
@@ -18,6 +17,12 @@ FoodOrderRouter.post("/", auth, async (req: CustomRequest, res: Response) => {
   } catch (e) {
     console.error(e, "aldaa");
   }
+});
+
+FoodOrderRouter.get("/", async (req: Request, res: Response) => {
+  // const id = req.params.id;
+  const oneFoodCategories = await FoodOrderModel.find().populate("user");
+  res.json(oneFoodCategories);
 });
 
 // FoodOrderRouter.post("/", async (req: Request, res: Response) => {

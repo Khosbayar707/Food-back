@@ -6,6 +6,7 @@ import { FoodModel } from "./models/food";
 import { foodRouter } from "./router/food";
 import { foodOrderItemRouter } from "./router/food-order-item";
 import FoodOrderRouter from "./router/food-order";
+import userRouter from "./router/user";
 const mongoose = require("mongoose");
 const cors = require("cors");
 const PORT = 8000;
@@ -43,6 +44,9 @@ app.use("/food/", foodRouter);
 
 //FOOD ORDER DB
 app.use("/food-order/", FoodOrderRouter);
+
+//USER DB
+app.use("/user/", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is runnig on http://localhost:${PORT}`);
