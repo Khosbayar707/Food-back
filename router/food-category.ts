@@ -27,7 +27,7 @@ export const auth = async (
   }
 };
 
-foodCategoryRouter.get("/", auth, async (req: Request, res: Response) => {
+foodCategoryRouter.get("/", async (req: Request, res: Response) => {
   const foodCategories = await FoodCategoryModel.find();
   res.json(foodCategories);
 });
