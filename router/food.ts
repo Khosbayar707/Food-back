@@ -1,24 +1,19 @@
 import { Request, Response, Router } from "express";
 import { FoodModel } from "../models/food";
+import { auth, isAdmin } from "../middleware/auth";
 
 export const foodRouter = Router();
 
-// foodRouter.get("/", async (req: Request, res: Response) => {
-//   const query = req.query;
-//   const food = await FoodModel.find();
-//   res.json(food);
-// });
-
 foodRouter.get("/", async (req: Request, res: Response) => {
   try {
-    const { category } = req.query; // Extract category from query params
+    const { category } = req.query;
 
     let filter = {};
     if (category) {
-      filter = { category: category }; // Filter by category if provided
+      filter = { category: category };
     }
 
-    const foods = await FoodModel.find(filter); // Apply filter in database query
+    const foods = await FoodModel.find(filter);
     res.json(foods);
   } catch (error) {
     console.error("Error fetching foods:", error);
@@ -27,12 +22,6 @@ foodRouter.get("/", async (req: Request, res: Response) => {
 });
 
 export default foodRouter;
-
-// foodRouter.get("/?category", async (req: Request, res: Response) => {
-//   const query = req.query;
-//   const food = await FoodModel.find();
-//   res.json(food);
-// });
 
 foodRouter.get("/:_id", async (req: Request, res: Response) => {
   const id = req.params._id;
@@ -43,7 +32,7 @@ foodRouter.get("/:_id", async (req: Request, res: Response) => {
   res.json(oneFood);
 });
 
-foodRouter.post("/", async (req: Request, res: Response) => {
+foodRouter.post("/", auth, isAdmin, async (req: Request, res: Response) => {
   const body = { ...req.body };
 
   try {
@@ -54,19 +43,24 @@ foodRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
-foodRouter.delete("/:_id", async (req: Request, res: Response) => {
-  const id = req.params._id;
-  try {
-    const deletedItem = await FoodModel.findByIdAndDelete({
-      _id: id,
-    });
-    res.json(deletedItem);
-  } catch (e) {
-    console.error(e, "aldaa");
+foodRouter.delete(
+  "/:_id",
+  auth,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const id = req.params._id;
+    try {
+      const deletedItem = await FoodModel.findByIdAndDelete({
+        _id: id,
+      });
+      res.json(deletedItem);
+    } catch (e) {
+      console.error(e, "aldaa");
+    }
   }
-});
+);
 
-foodRouter.put("/:_id", async (req: Request, res: Response) => {
+foodRouter.put("/:_id", auth, isAdmin, async (req: Request, res: Response) => {
   const id = req.params._id;
   const body = { ...req.body };
   const updatedItem = await FoodModel.findOneAndUpdate({ _id: id }, body);

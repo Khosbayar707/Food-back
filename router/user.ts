@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { UserModel } from "../models/user";
+import { auth, isAdmin } from "../middleware/auth";
 
 export const userRouter = Router();
 
@@ -31,7 +32,7 @@ userRouter.get("/:_id", async (req: Request, res: Response) => {
   res.json(oneUser);
 });
 
-userRouter.post("/", async (req: Request, res: Response) => {
+userRouter.post("/", auth, isAdmin, async (req: Request, res: Response) => {
   const body = { ...req.body };
 
   try {
@@ -42,19 +43,24 @@ userRouter.post("/", async (req: Request, res: Response) => {
   }
 });
 
-userRouter.delete("/:_id", async (req: Request, res: Response) => {
-  const id = req.params._id;
-  try {
-    const deletedUser = await UserModel.findByIdAndDelete({
-      _id: id,
-    });
-    res.json(deletedUser);
-  } catch (e) {
-    console.error(e, "aldaa");
+userRouter.delete(
+  "/:_id",
+  auth,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const id = req.params._id;
+    try {
+      const deletedUser = await UserModel.findByIdAndDelete({
+        _id: id,
+      });
+      res.json(deletedUser);
+    } catch (e) {
+      console.error(e, "aldaa");
+    }
   }
-});
+);
 
-userRouter.put("/:_id", async (req: Request, res: Response) => {
+userRouter.put("/:_id", auth, isAdmin, async (req: Request, res: Response) => {
   const id = req.params._id;
   const body = { ...req.body };
   const updatedUser = await UserModel.findOneAndUpdate({ _id: id }, body);

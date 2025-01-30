@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { FoodOrderItemModel } from "../models/food-order-item";
+import { auth, isAdmin } from "../middleware/auth";
 
 export const foodOrderItemRouter = Router();
 // foodRouter.get("/", async (req: Request, res: Response) => {
@@ -42,27 +43,37 @@ foodOrderItemRouter.get("/:_id", async (req: Request, res: Response) => {
   res.json(oneItem);
 });
 
-foodOrderItemRouter.post("/", async (req: Request, res: Response) => {
-  const body = req.body;
-  try {
-    const newItem = await FoodOrderItemModel.create(body);
-    res.json(newItem);
-  } catch (e) {
-    console.error(e, "aldaa");
+foodOrderItemRouter.post(
+  "/",
+  auth,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      const newItem = await FoodOrderItemModel.create(body);
+      res.json(newItem);
+    } catch (e) {
+      console.error(e, "aldaa");
+    }
   }
-});
+);
 
-foodOrderItemRouter.delete("/:_id", async (req: Request, res: Response) => {
-  const id = req.params._id;
-  try {
-    const deletedItem = await FoodOrderItemModel.findByIdAndDelete({
-      _id: id,
-    });
-    res.json(deletedItem);
-  } catch (e) {
-    console.error(e, "aldaa");
+foodOrderItemRouter.delete(
+  "/:_id",
+  auth,
+  isAdmin,
+  async (req: Request, res: Response) => {
+    const id = req.params._id;
+    try {
+      const deletedItem = await FoodOrderItemModel.findByIdAndDelete({
+        _id: id,
+      });
+      res.json(deletedItem);
+    } catch (e) {
+      console.error(e, "aldaa");
+    }
   }
-});
+);
 
 // foodOrderItemRouter.put("/:_id", async (req: Request, res: Response) => {
 //   const id = req.params._id;
