@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import { FoodOrderItemModel } from "../models/food-order-item";
-import { auth, isAdmin } from "../middleware/auth";
+import { auth, CustomRequest, isAdmin } from "../middleware/auth";
 
 export const foodOrderItemRouter = Router();
 // foodRouter.get("/", async (req: Request, res: Response) => {
@@ -34,7 +34,7 @@ export default foodOrderItemRouter;
 //   res.json(food);
 // });
 
-foodOrderItemRouter.get("/:_id", async (req: Request, res: Response) => {
+foodOrderItemRouter.get("/:_id", async (req: CustomRequest, res: Response) => {
   const id = req.params._id;
   if (!id) {
     res.json({ messege: "error" });
@@ -47,7 +47,7 @@ foodOrderItemRouter.post(
   "/",
   auth,
   isAdmin,
-  async (req: Request, res: Response) => {
+  async (req: CustomRequest, res: Response) => {
     const body = req.body;
     try {
       const newItem = await FoodOrderItemModel.create(body);
@@ -62,7 +62,7 @@ foodOrderItemRouter.delete(
   "/:_id",
   auth,
   isAdmin,
-  async (req: Request, res: Response) => {
+  async (req: CustomRequest, res: Response) => {
     const id = req.params._id;
     try {
       const deletedItem = await FoodOrderItemModel.findByIdAndDelete({

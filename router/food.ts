@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
 import { FoodModel } from "../models/food";
-import { auth, isAdmin } from "../middleware/auth";
+import { auth, CustomRequest, isAdmin } from "../middleware/auth";
 
 export const foodRouter = Router();
 
-foodRouter.get("/", async (req: Request, res: Response) => {
+foodRouter.get("/", async (req: CustomRequest, res: Response) => {
   try {
     const { category } = req.query;
 
@@ -23,7 +23,7 @@ foodRouter.get("/", async (req: Request, res: Response) => {
 
 export default foodRouter;
 
-foodRouter.get("/:_id", async (req: Request, res: Response) => {
+foodRouter.get("/:_id", auth, async (req: CustomRequest, res: Response) => {
   const id = req.params._id;
   if (!id) {
     res.json({ messege: "error" });
@@ -32,16 +32,21 @@ foodRouter.get("/:_id", async (req: Request, res: Response) => {
   res.json(oneFood);
 });
 
-foodRouter.post("/", auth, isAdmin, async (req: Request, res: Response) => {
-  const body = { ...req.body };
+foodRouter.post(
+  "/",
+  auth,
+  isAdmin,
+  async (req: CustomRequest, res: Response) => {
+    const body = { ...req.body };
 
-  try {
-    const newFood = await FoodModel.create(body);
-    res.json(newFood);
-  } catch (e) {
-    console.error(e, "aldaa");
+    try {
+      const newFood = await FoodModel.create(body);
+      res.json(newFood);
+    } catch (e) {
+      console.error(e, "aldaa");
+    }
   }
-});
+);
 
 foodRouter.delete(
   "/:_id",

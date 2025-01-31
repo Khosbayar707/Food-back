@@ -24,23 +24,27 @@ FoodOrderRouter.post(
   }
 );
 
-FoodOrderRouter.get("/", async (req: Request, res: Response) => {
+FoodOrderRouter.get("/", auth, async (req: CustomRequest, res: Response) => {
   // const id = req.params.id;
   const oneFoodOrder = await FoodOrderModel.find().populate("user");
   res.json(oneFoodOrder);
 });
 
-FoodOrderRouter.get("/:user", async (req: Request, res: Response) => {
-  const { user } = req.params;
-  const oneFoodOrder = await FoodOrderModel.find({ user }).populate("user");
-  res.json(oneFoodOrder);
-});
+FoodOrderRouter.get(
+  "/:user",
+  auth,
+  async (req: CustomRequest, res: Response) => {
+    const { user } = req.params;
+    const oneFoodOrder = await FoodOrderModel.find({ user }).populate("user");
+    res.json(oneFoodOrder);
+  }
+);
 
 FoodOrderRouter.delete(
   "/:_id",
   auth,
   isAdmin,
-  async (req: Request, res: Response) => {
+  async (req: CustomRequest, res: Response) => {
     const id = req.params._id;
     try {
       const deletedItem = await FoodOrderModel.findByIdAndDelete({
@@ -57,7 +61,7 @@ FoodOrderRouter.put(
   "/:_id",
   auth,
   isAdmin,
-  async (req: Request, res: Response) => {
+  async (req: CustomRequest, res: Response) => {
     const id = req.params._id;
     const body = { ...req.body };
     const updatedItem = await FoodOrderModel.findOneAndUpdate(
