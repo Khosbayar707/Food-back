@@ -3,6 +3,7 @@ import { FoodModel } from "../models/food";
 import { auth, CustomRequest, isAdmin } from "../middleware/auth";
 
 export const foodRouter = Router();
+export default foodRouter;
 
 foodRouter.get("/", async (req: CustomRequest, res: Response) => {
   try {
@@ -20,8 +21,6 @@ foodRouter.get("/", async (req: CustomRequest, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-export default foodRouter;
 
 foodRouter.get("/:_id", auth, async (req: CustomRequest, res: Response) => {
   const id = req.params._id;
